@@ -15,15 +15,27 @@ program
     let result = 0;
 
     while (n < options.args.length) {
-      if (!str.even && !str.odd && str.f) {
-        str.f ? (result += Number.parseFloat(options.args[n])) : (result += Number(options.args[n]));
-      } else if (str.even) {
-        Number(options.args[n]) % 2 === 0 ? (result += Number.parseFloat(options.args[n])) : result;
-      } else if (str.odd) {
-        Number.parseFloat(options.args[n]) % 2 !== 0 ? (result += Number.parseFloat(options.args[n])) : result;
-      } else if (!str.even && !str.odd && !str.f) {
+      if (str.f) {
+        if (str.even && str.odd) {
+          Number.isInteger(Number(options.args[n])) ? (result += Number(options.args[n])) : result;
+        } else if (str.even && !str.odd) {
+          Number(options.args[n]) % 2 === 0 ? (result += Number(options.args[n])) : result;
+        } else if (!str.even && str.odd) {
+          Number(options.args[n]) % 2 === 1 ? (result += Number(options.args[n])) : result;
+        } else {
+          result += Number.parseFloat(options.args[n]);
+        }
+      } else {
+        if (str.even && str.odd) {
+          Number.isInteger(Number(options.args[n])) ? (result += Number(options.args[n])) : result;
+        } else if (str.even && !str.odd) {
+          Number(options.args[n]) % 2 === 0 ? (result += Number(options.args[n])) : result;
+        } else if (!str.even && str.odd) {
+          Number(options.args[n]) % 2 === 1 ? (result += Number(options.args[n])) : result;
+        } else {
+          Number.isInteger(Number(options.args[n])) ? (result += Number(options.args[n])) : result;
+        }
       }
-
       n++;
     }
     console.log(result);
