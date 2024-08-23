@@ -3,14 +3,14 @@ import { Command } from "commander";
 const program = new Command();
 program.name("calculator_cli").description("計算を行うCLIです");
 const floatingNumber = program.createOption("-f", "floating number");
-const add = program.createCommand("add").addOption(floatingNumber);
+const add = program.command("add");
 
 const even = program.createCommand("even").action((str, options) => {
   let n = 0;
   let result = 0;
+  // console.log(add.getOptionValue("floatingNumber"));
 
   if (options.parent.getOptionValue("f")) {
-    // console.log(add.getOptionValue("floatingNumber"));
     while (n < options.args.length) {
       Number.parseFloat(options.args[n]) % 2 === 0 ? (result += Number(options.args[n])) : result;
       n++;
@@ -44,8 +44,7 @@ const odd = program.createCommand("odd").action((str, options) => {
   }
 });
 
-program
-  .command("add")
+add
   .description("加算する")
   .arguments("<numbers...>")
   .addCommand(even)
