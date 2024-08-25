@@ -2,50 +2,23 @@ import { Command } from "commander";
 
 const program = new Command();
 program.name("calculator_cli").description("計算を行うCLIです");
-const floatingNumber = program.createOption("-f", "floating number");
 const add = program.command("add");
+const floatingNumber = program.createOption("-f", "floating number");
 
 const even = program
   .createCommand("even")
   .argument("<numbers...>")
-  .action((numbers, str, options) => {
-    let n = 0;
-    let result = 0;
-
-    if (add.getOptionValue("f")) {
-      for (const arg of options.args) {
-        Number.parseFloat(arg) % 2 === 0 ? (result += Number(arg)) : result;
-      }
-      console.log(result);
-    } else {
-      while (n < options.args.length) {
-        Number(numbers[n]) % 2 === 0 ? (result += Number(numbers[n])) : result;
-        n++;
-      }
-      console.log(result);
-    }
+  .action((numbers) => {
+    const result = calculateForEvenAndOdd("even", numbers);
+    console.log(result);
   });
 
 const odd = program
   .createCommand("odd")
   .argument("<numbers...>")
-  .action((numbers, str, options) => {
-    let n = 0;
-    let result = 0;
-
-    if (add.getOptionValue("f")) {
-      while (n < options.args.length) {
-        Number.parseFloat(numbers[n]) % 2 === 1 ? (result += Number(numbers[n])) : result;
-        n++;
-      }
-      console.log(result);
-    } else {
-      while (n < options.args.length) {
-        Number(numbers[n]) % 2 === 1 ? (result += Number(numbers[n])) : result;
-        n++;
-      }
-      console.log(result);
-    }
+  .action((numbers) => {
+    const result = calculateForEvenAndOdd("odd", numbers);
+    console.log(result);
   });
 
 add
@@ -55,18 +28,34 @@ add
   .addCommand(odd)
   .addOption(floatingNumber)
   .action((numbers, option) => {
-    let n = 0;
     let result = 0;
-
-    while (n < numbers.length) {
+    for (const arg of numbers) {
       if (option.f) {
-        result += Number.parseFloat(numbers[n]);
+        result += Number.parseFloat(arg);
       } else {
-        Number.isInteger(Number(numbers[n])) ? (result += Number(numbers[n])) : result;
+        Number.isInteger(Number(arg)) ? (result += Number(arg)) : result;
       }
-      n++;
     }
     console.log(result);
   });
 
 program.parse();
+
+function calculateForEvenAndOdd(oddOrEven, numbers) {
+  let result = 0;
+  let remainder = 0;
+
+  oddOrEven === "even" ? (remainder = 0) : (remainder = 1);
+
+  if (add.getOptionValue("f")) {
+    for (const arg of numbers) {
+      Number.parseFloat(arg) % 2 === remainder ? (result += Number(arg)) : result;
+    }
+    return result;
+  } else {
+    for (const arg of numbers) {
+      Number(arg) % 2 === remainder ? (result += Number(arg)) : result;
+    }
+    return result;
+  }
+}
