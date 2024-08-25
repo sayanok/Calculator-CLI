@@ -5,44 +5,48 @@ program.name("calculator_cli").description("計算を行うCLIです");
 const floatingNumber = program.createOption("-f", "floating number");
 const add = program.command("add");
 
-const even = program.createCommand("even").action((str, options) => {
-  let n = 0;
-  let result = 0;
-  // console.log(add.getOptionValue("floatingNumber"));
+const even = program
+  .createCommand("even")
+  .argument("<numbers...>")
+  .action((numbers, str, options) => {
+    let n = 0;
+    let result = 0;
 
-  if (options.parent.getOptionValue("f")) {
-    while (n < options.args.length) {
-      Number.parseFloat(options.args[n]) % 2 === 0 ? (result += Number(options.args[n])) : result;
-      n++;
+    if (add.getOptionValue("f")) {
+      for (const arg of options.args) {
+        Number.parseFloat(arg) % 2 === 0 ? (result += Number(arg)) : result;
+      }
+      console.log(result);
+    } else {
+      while (n < options.args.length) {
+        Number(numbers[n]) % 2 === 0 ? (result += Number(numbers[n])) : result;
+        n++;
+      }
+      console.log(result);
     }
-    console.log(result);
-  } else {
-    while (n < options.args.length) {
-      Number(options.args[n]) % 2 === 0 ? (result += Number(options.args[n])) : result;
-      n++;
-    }
-    console.log(result);
-  }
-});
+  });
 
-const odd = program.createCommand("odd").action((str, options) => {
-  let n = 0;
-  let result = 0;
+const odd = program
+  .createCommand("odd")
+  .argument("<numbers...>")
+  .action((numbers, str, options) => {
+    let n = 0;
+    let result = 0;
 
-  if (options.parent.getOptionValue("f")) {
-    while (n < options.args.length) {
-      Number.parseFloat(options.args[n]) % 2 === 1 ? (result += Number(options.args[n])) : result;
-      n++;
+    if (add.getOptionValue("f")) {
+      while (n < options.args.length) {
+        Number.parseFloat(numbers[n]) % 2 === 1 ? (result += Number(numbers[n])) : result;
+        n++;
+      }
+      console.log(result);
+    } else {
+      while (n < options.args.length) {
+        Number(numbers[n]) % 2 === 1 ? (result += Number(numbers[n])) : result;
+        n++;
+      }
+      console.log(result);
     }
-    console.log(result);
-  } else {
-    while (n < options.args.length) {
-      Number(options.args[n]) % 2 === 1 ? (result += Number(options.args[n])) : result;
-      n++;
-    }
-    console.log(result);
-  }
-});
+  });
 
 add
   .description("加算する")
